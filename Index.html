@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reward WebApp</title>
+  <script src="//libtl.com/sdk.js" data-zone="9153061" data-sdk="show_9153061"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1d1d2e, #3a3a60);
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .points {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      background: #2e2e4d;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    .btn {
+      background: #00c2ff;
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #00a2d9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Watch Ads & Earn Points</h1>
+  <div class="points">Your Points: <span id="points">0</span></div>
+  <br />
+  <button class="btn" onclick="showRewardedInterstitial()">Rewarded Interstitial</button>
+  <button class="btn" onclick="showRewardedPopup()">Rewarded Popup</button>
+  <button class="btn" onclick="startInAppAds()">Start In-App Interstitials</button>
+
+  <script>
+    let points = 0;
+
+    function updatePoints() {
+      document.getElementById("points").textContent = points;
+      localStorage.setItem("myPoints", points);
+    }
+
+    function rewardUser() {
+      points += 10; // Reward amount
+      updatePoints();
+      alert("You earned 10 points!");
+    }
+
+    function showRewardedInterstitial() {
+      show_9153061().then(() => {
+        rewardUser();
+      }).catch(e => {
+        console.warn('Rewarded interstitial error:', e);
+      });
+    }
+
+    function showRewardedPopup() {
+      show_9153061('pop').then(() => {
+        rewardUser();
+      }).catch(e => {
+        console.warn('Rewarded popup error:', e);
+      });
+    }
+
+    function startInAppAds() {
+      show_9153061({
+        type: 'inApp',
+        inAppSettings: {
+          frequency: 4,
+          capping: 0.2,
+          interval: 30,
+          timeout: 5,
+          everyPage: true
+        }
+      });
+      alert('In-App Ads started');
+    }
+
+    // Restore saved points
+    window.onload = () => {
+      points = parseInt(localStorage.getItem("myPoints")) || 0;
+      updatePoints();
+    };
+  </script>
+</body>
+</html>
